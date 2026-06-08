@@ -341,3 +341,148 @@ LLM 預設只實作「靜態成功狀態」。必須實作完整週期：
 - [ ] 眉標數量 ≤ ceil(sectionCount / 3)
 - [ ] 沒有 zigzag 連續 3 個以上的 image+text split 區塊
 - [ ] 沒有重複的版型家族（每種版型家族最多出現一次）
+- [ ] 輸出中沒有任何 `—`（em-dash）或 `–`（en-dash 分隔符）可見字元
+- [ ] Light / Dark 兩種模式都已測試，沒有只出貨單一模式
+
+---
+
+## 六、Em-Dash 完全禁令
+
+來自 taste-skill Section 9.G，這是 LLM 最常被發現的 Tell，必須 zero tolerance：
+
+- `—`（em-dash）在所有可見文字中完全禁止：標題、eyebrow、標籤、按鈕文字、圖片說明、內文、引言歸屬
+- 替代方式：用句號分兩句、用逗號、用括號、用冒號改寫句子
+- 日期範圍（2018-2026）和數字範圍（€40-80k）用一般 hyphen `-`
+- `–`（en-dash 作分隔符）同樣禁止
+- 輸出中出現任何一個 `—` 或 `–` 即 Pre-Flight 失敗，必須重寫
+- 此規則不可用「謹慎使用」軟化，是二元規則：零 em-dash
+
+---
+
+## 七、設計詞彙庫（Reference Vocabulary）
+
+來自 taste-skill Section 10。Agent 應知道這些模式名稱，以便設計討論和快速選型。這是詞彙表，不是代碼庫；實作細節另存 Block Library。
+
+### Hero Paradigms（Hero 版型）
+
+- **Asymmetric Split Hero** - 文字在一側、資產在另一側，大量留白
+- **Editorial Manifesto Hero** - 大字型、無視覺資產、近乎海報
+- **Video / Media Mask Hero** - 文字以遮罩形式切出，背景為影片
+- **Kinetic-Type Hero** - 動態字型作為主要視覺
+- **Curtain-Reveal Hero** - Hero 元素在滾動時如幕布展開
+- **Scroll-Pinned Hero** - Hero 固定不動，內容在背後滾動
+
+### Navigation & Menus（導覽與選單）
+
+- **Mac OS Dock Magnification** - 邊緣導覽，圖示在 hover 時流暢放大
+- **Magnetic Button** - 按鈕朝游標方向吸引
+- **Gooey Menu** - 子項目如黏性液體分離
+- **Dynamic Island** - 可變形的狀態 / 提示 pill
+- **Contextual Radial Menu** - 在點擊位置展開的圓形選單
+- **Floating Speed Dial** - FAB 展開為弧形次要動作
+- **Mega Menu Reveal** - 全螢幕下拉式選單，內容交錯淡入
+
+### Layout & Grids（版型與網格）
+
+- **Bento Grid** - 不對稱磁磚分組（Apple Control Center 風格）
+- **Masonry Layout** - 交錯網格，無固定行高
+- **Chroma Grid** - 邊框 / 磁磚帶有微妙動態漸層
+- **Split-Screen Scroll** - 兩個半面朝相反方向滑動
+- **Sticky-Stack Sections** - 區塊在滾動時固定並堆疊
+
+### Cards & Containers（卡片與容器）
+
+- **Parallax Tilt Card** - 3D 傾斜追蹤滑鼠座標
+- **Spotlight Border Card** - 邊框在游標下發光
+- **Glassmorphism Panel** - 磨砂玻璃加內折射
+- **Holographic Foil Card** - hover 時彩虹色澤偏移
+- **Tinder Swipe Stack** - 實體卡片堆疊，可滑走
+- **Morphing Modal** - 按鈕展開成自身的對話框
+
+### Scroll Animations（滾動動畫）
+
+- **Sticky Scroll Stack** - 卡片固定並實體堆疊
+- **Horizontal Scroll Hijack** - 垂直滾動轉水平平移
+- **Locomotive / Sequence Scroll** - 影片 / 3D 序列與捲軸連動
+- **Zoom Parallax** - 中央背景圖隨滾動放大
+- **Scroll Progress Path** - SVG 線條隨滾動繪製
+- **Liquid Swipe Transition** - 頁面轉場如黏性液體
+
+### Galleries & Media（畫廊與媒體）
+
+- **Dome Gallery** - 3D 全景畫廊
+- **Coverflow Carousel** - 帶有角度邊緣的 3D 輪播
+- **Drag-to-Pan Grid** - 無邊界可拖拉畫布
+- **Accordion Image Slider** - 細長條在 hover 時展開
+- **Hover Image Trail** - 滑鼠移動留下爆現圖片軌跡
+- **Glitch Effect Image** - hover 時 RGB 頻道偏移
+
+### Typography & Text（字型與文字）
+
+- **Kinetic Marquee** - 無限文字帶，隨滾動方向反轉
+- **Text Mask Reveal** - 超大字型作為透明窗口呈現影片
+- **Text Scramble Effect** - 載入 / hover 時如 Matrix 解碼
+- **Circular Text Path** - 文字沿旋轉圓弧排列
+- **Gradient Stroke Animation** - 外框文字搭配流動漸層
+- **Kinetic Typography Grid** - 字母躲避游標
+
+### Micro-Interactions & Effects（微互動與效果）
+
+- **Particle Explosion Button** - CTA 成功時炸裂成粒子
+- **Liquid Pull-to-Refresh** - 重新載入指示器如分離水滴
+- **Skeleton Shimmer** - 佔位符上移動的光反射
+- **Directional Hover-Aware Button** - 填色從游標所在側進入
+- **Ripple Click Effect** - 從點擊座標向外擴散的波紋
+- **Animated SVG Line Drawing** - 向量即時自我繪製
+- **Mesh Gradient Background** - 有機熔岩燈泡狀漸層
+- **Lens Blur Depth** - 背景模糊以聚焦前景動作
+
+### Animation Library Choice（動畫函式庫選型）
+
+- **Motion (`motion/react`)** - UI / Bento / 狀態切換動畫的預設選擇
+- **GSAP + ScrollTrigger** - 全頁 scrolltelling 與滾動劫持。隔離於專用的 leaf component 並加 `useEffect` cleanup
+- **Three.js / WebGL** - canvas 背景與 3D 場景，同樣需隔離
+- **禁止在同一個 component tree 中混用 GSAP / Three.js 與 Motion**：它們爭用同一個 frame
+
+---
+
+## 八、效能 + 可及性護欄
+
+來自 taste-skill Section 6 和 Section 8：
+
+### 6.A 硬體加速
+
+只對 `transform` 和 `opacity` 做動畫；絕不動畫 `top`、`left`、`width`、`height`。`will-change` 謹慎使用，只加在真正會動畫的元素上。
+
+### 6.B 減少動態（強制）
+
+`MOTION_INTENSITY > 3` 必須實作 `prefers-reduced-motion`。在 Motion 中用 `useReducedMotion()` 降級為靜態；在 CSS 中以 `@media (prefers-reduced-motion: no-preference)` 或覆寫區塊控制。無限循環 / parallax / scroll-hijack / 磁性物理 在 reduce 模式下必須 collapse 為靜態或即時。
+
+### 6.C Dark Mode（consumer 向頁面強制雙模式）
+
+設計從一開始就同時考慮 light / dark，不得只做一種（除非 brief 明確指定單一模式）。採用 Tailwind `dark:` variant 或 CSS variables 擇一，同一專案不得混用兩種策略。
+
+### 6.D Core Web Vitals 目標
+
+- **LCP** < 2.5s：hero 圖必須 `next/image priority` 或 preload
+- **INP** < 200ms：繁重工作移離主執行緒
+- **CLS** < 0.1：為圖片、字型、embed 預留空間
+- 宣告頁面完成前執行 Lighthouse
+
+### 6.E DOM Cost
+
+grain / noise 濾鏡只能用在 fixed `pointer-events-none` 的偽元素（`fixed inset-0 z-[60] pointer-events-none`）；絕不用在滾動容器上，持續 GPU repaint 會摧毀行動端 FPS。
+
+### 6.F z-index 紀律
+
+禁止亂噴 `z-50` / `z-10`。z-index 只用於系統層級（sticky nav、modal、overlay、grain）。在專案常數檔中記錄 z-index scale。
+
+---
+
+### Dark Mode Protocol（Section 8）
+
+- 預設雙模式，除非 brief 明確指定單模式（例如印刷模擬 editorial）
+- Token 策略二選一：Tailwind `dark:` variant 或 CSS variables；專案只選一種，不得混用
+- 不得用純 `#000000` 或純 `#ffffff`（使用 zinc-950、off-white），純值會消除深度
+- 確保 light 模式下有視覺層次感的 CTA，在 dark 模式下同樣突出
+- 出貨前必須在 light / dark 兩種模式下測試，不可只在一種模式下出貨

@@ -43,6 +43,10 @@ description: 美術設計師。當任務涉及色彩設計、配色方案、插�
 - [ ] 素材格式優先使用 WebP / SVG
 - [ ] `art-assets.md` 已寫入 `docs/features/<功能代號>/`
 - [ ] 已回報總指揮視覺素材重點
-- [ ] 無 AI Tells 違規
-- [ ] Bento 格子有視覺多樣性（非全白底文字）
+- [ ] 逐條對照 `anti-generic` skill §四禁止清單，以下全部為否：
+  - 使用 AI-purple / warm cream+brass 預設色盤 / 三等份卡片排版？
+  - 使用純黑 #000000 或過飽和強調色（Saturation > 80%）？
+  - 使用 Fraunces 或 Instrument_Serif 作為預設字型（無明確理由）？
+  - 出現 em-dash `—` 或 `–`（separator 用途）？
+- [ ] Bento grid 至少 2-3 格有真實圖像 / 漸層 / 底紋差異（非全白底純文字）
 </完工前驗證>

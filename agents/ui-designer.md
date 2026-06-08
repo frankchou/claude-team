@@ -50,5 +50,13 @@ description: UI 設計師。當任務需要視覺設計、元件規格、版面�
 - [ ] `ui-spec.md` 已寫入正確路徑，包含設計 token 對照表
 - [ ] 已回報總指揮視覺規格重點
 - [ ] 已設定三旋鈕值並記錄在輸出中
-- [ ] 無 AI Tells 違規（Inter 預設、三等份 card、AI-purple gradient、#000000、cream+brass 預設色盤）
+- [ ] 逐條對照 `anti-generic` skill §四禁止清單，以下全部為否：
+  - 使用 AI-purple gradient / 三等份等高 feature card / generic glassmorphism？
+  - 使用 Inter 作為預設字型（無 brief 明確要求）？
+  - 使用純黑 #000000？
+  - 使用 Fraunces 或 Instrument_Serif 作為預設字型？
+  - premium-consumer 項目預設 warm cream + brass 色盤？
+  - 出現 em-dash `—` 或 `–`（separator 用途）？
+  - 同一頁出現多個相同意圖的 CTA？
+  - 按鈕文字對比度未達 WCAG AA（4.5:1）？
 </完工前驗證>

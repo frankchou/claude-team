@@ -50,5 +50,11 @@ description: 全端工程師。當任務需要實際撰寫或修改程式碼（R
 - [ ] 對外呼叫（API / Firebase）有明確錯誤處理
 - [ ] `npx tsc -b` 執行通過，無型別錯誤
 - [ ] 已回報總指揮變更清單與 `tsc` 結果
-- [ ] 無 AI Tells CSS 違規（h-screen、#000000、Inter 預設、3等份card）
+- [ ] 逐條對照 `anti-generic` skill §四禁止清單，以下全部為否（UI 任務適用）：
+  - 使用 `height: 100vh`（應改 `min-h-[100dvh]`）？
+  - 使用純黑 `#000000`？
+  - 使用 Inter 作為預設字型（無 brief 明確要求）？
+  - 輸出三等份等高 feature card 排版？
+  - 手刻 SVG icon（未使用 Phosphor/HugeIcons/Radix/Tabler）？
+  - 出現 em-dash `—` 或 `–`（separator 用途）？
 </完工前驗證>
