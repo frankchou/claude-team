@@ -7,6 +7,8 @@ description: 設計系統基底規範。UI 設計師、UX 設計師、美術設�
 
 > **這是全域共通包的基底版本，包含與專案無關的設計品質底線。**
 >
+> **具體 CSS 數值（色碼、字型名稱、clamp() 數值）、Tailwind class（如 pt-24、max-w-6xl）、品牌色值請在專案覆寫版填入，不寫在這份基底版。**
+>
 > **專案覆寫方式：** 在你的專案 repo 建立 `.claude/skills/design-system/SKILL.md`，
 > 填入品牌色、字型選擇、語氣等專案專屬內容。
 > Claude Code 會自動以專案版本優先，完全取代此基底版。
@@ -32,13 +34,13 @@ description: 設計系統基底規範。UI 設計師、UX 設計師、美術設�
 ## 二、字體系統
 
 ### 全域禁止字體（任何情況下不得使用）
-- ❌ `Inter`（作為預設，泛濫過度）
-- ❌ `Roboto`
-- ❌ `Arial`
-- ❌ `Open Sans`
-- ❌ `Helvetica`（無明確品牌需求時）
-- ❌ 通用 serif：`Times New Roman`、`Georgia`、`Garamond`、`Palatino`
-- ❌ 任何瀏覽器預設 serif 堆疊
+- `Inter`（作為預設，泛濫過度）
+- `Roboto`
+- `Arial`
+- `Open Sans`
+- `Helvetica`（無明確品牌需求時）
+- 通用 serif：`Times New Roman`、`Georgia`、`Garamond`、`Palatino`
+- 任何瀏覽器預設 serif 堆疊
 
 ### 推薦替代字體（依產品類型）
 | 產品類型 | Display / Heading | Body | Mono |
@@ -48,11 +50,12 @@ description: 設計系統基底規範。UI 設計師、UX 設計師、美術設�
 | 編輯 / 文件 | Outfit、Plus Jakarta Sans | Plus Jakarta Sans | JetBrains Mono |
 | 若需 Serif | Fraunces、Instrument Serif（限品牌明確指定） | — | — |
 
-### 字體規格
-- Display：`clamp(2.25rem, 5vw, 3.75rem)`，字距 `-0.025em`，行高 `1.1`
-- Heading H1–H3：字重 700–900，行高 `1.2–1.3`
-- Body：字重 400，行高 `1.5–1.65`，最大行長 **65–75 字符**
-- Mono：用於數字資料、時間戳、程式碼，密度 >7 時所有數字強制 Mono
+### 字體規格原則
+- Display：字大、字距緊（負值）、行高短；強調視覺衝擊，適合英雄與大標題場景。具體字級與 clamp() 數值在專案覆寫版填入。
+- Heading H1–H3：字重偏重（700–900），行高緊湊（介於 Display 與 Body 之間），適合段落標題。
+- Body：字重正常（400），行高寬鬆以利閱讀，單行長度控制在 65–75 字符之間避免過長掃描疲勞。
+- Mono：用於數字資料、時間戳、程式碼。視覺密度高的版面（Density > 7）時，所有數字強制使用 Mono 字體以對齊。
+- 上述任何具體字級數值（px、rem、clamp()）在專案覆寫版填入，基底版不設定。
 
 ---
 
@@ -74,11 +77,11 @@ description: 設計系統基底規範。UI 設計師、UX 設計師、美術設�
 ```
 
 ### 色彩禁止模式
-- ❌ 純黑 `#000000`（改用 `#111111` 或 Zinc-950）
-- ❌ 「AI 紫藍霓虹漸層」美學（紫色按鈕輝光、霓虹漸變）
-- ❌ 飽和度超過 80% 的強調色
-- ❌ 在同一專案混用暖灰 / 冷灰系統
-- ❌ 多於 1 個強調色（保持克制）
+- 純黑 `#000000`（改用近黑色，具體色碼在專案覆寫版填入）
+- 「AI 紫藍霓虹漸層」美學（紫色按鈕輝光、霓虹漸變）
+- 飽和度超過 80% 的強調色
+- 在同一專案混用暖灰 / 冷灰系統
+- 多於 1 個強調色（保持克制）
 
 ### 對比度要求（WCAG）
 | 等級 | 正常文字 | 大文字（18px+） | UI 元件 |
@@ -93,7 +96,7 @@ description: 設計系統基底規範。UI 設計師、UX 設計師、美術設�
 ### 英雄區塊
 - 標題：**≤ 2 行**（最多 3 行）
 - 副文本：**≤ 20 字**
-- 頂部填充：最多 `pt-24`（6rem）
+- 頂部填充：適度留白，讓英雄區塊有呼吸空間；具體數值在專案覆寫版填入
 - 元素堆疊：最多 4 個文字元素
 - CTA：最多 1 個主要 CTA，桌面端不換行
 - **禁止**：居中英雄 + 三欄卡片預設佈局（Design Variance > 4 時強制非對稱）
@@ -109,10 +112,10 @@ description: 設計系統基底規範。UI 設計師、UX 設計師、美術設�
 - 禁止「3 個相等欄卡片」重複超過一次
 
 ### CSS 硬規則
-- 用 `min-height: 100dvh` **不得** 用 `height: 100vh`（iOS Safari 問題）
-- 容器最大寬度：`max-w-6xl` 至 `max-w-7xl`（居中）
+- 用 `min-height: 100dvh`，**不得** 用 `height: 100vh`（iOS Safari 問題）
+- 容器設定最大寬度限制並水平居中對齊；具體寬度值（如 max-w-6xl 對應的像素值）在專案覆寫版填入
 - Grid 優先於 Flex 做響應式佈局
-- 禁止 `calc(33% - 1rem)` 這類百分比駭客
+- 禁止百分比加減法駭客（如 `calc(33% - 1rem)`）
 - `z-index` 只用於：導航列、Modal、Overlay 背景
 
 ---
@@ -129,11 +132,11 @@ description: 設計系統基底規範。UI 設計師、UX 設計師、美術設�
 
 ### 只用這兩個 CSS 屬性做動畫
 ```css
-/* ✅ 可以 */
+/* 可以 */
 transform: translateX() scale() rotate();
 opacity: 0 → 1;
 
-/* ❌ 絕對禁止 */
+/* 絕對禁止 */
 width / height / top / left / margin / padding
 ```
 
@@ -141,7 +144,7 @@ width / height / top / left / margin / padding
 - 進場：`ease-out`
 - 退場：`ease-in`（退場比進場快 30–40%）
 - **禁止**：UI 過渡用 `linear`
-- 推薦：Spring 物理（`stiffness: 100, damping: 20`）
+- 推薦：Spring 物理（stiffness 偏低、damping 偏高，具體參數在專案覆寫版填入）
 
 ### 必須尊重
 ```css
@@ -159,8 +162,8 @@ width / height / top / left / margin / padding
 - `default` — 預設狀態
 - `hover` — 滑鼠懸停
 - `active` / `pressed` — 按下中
-- `disabled` — 不可用（opacity 0.38–0.5 + cursor 改變）
-- `loading` — 非同步操作中（骨架屏 > 轉圈圈）
+- `disabled` — 不可用（視覺降低不透明度 + cursor 改變）
+- `loading` — 非同步操作中（骨架屏優於轉圈圈）
 - `empty` — 無資料（有指引文字 + 行動按鈕）
 - `error` — 錯誤（錯誤訊息在欄位旁邊，不只在頂部）
 
@@ -200,16 +203,16 @@ width / height / top / left / margin / padding
 - 任何地方禁止使用 `—` 或 `–`（AI 標記符號）
 
 ### UI 禁止模式
-- ❌ 移除焦點環（a11y 關鍵違規）
-- ❌ Hover-only 互動（行動裝置無法觸發）
-- ❌ Placeholder 當 Label 用
-- ❌ Icon-only 按鈕沒有 label
-- ❌ 只用顏色傳達資訊（色盲友善）
-- ❌ 圓形轉圈加載（改用骨架屏）
-- ❌ 「向下滾動以探索」等填充文字
-- ❌ 英雄上的任意浮動徽章 / 郵票圖標
-- ❌ 3 列相等卡片功能佈局
-- ❌ 過度飽和的漸層背景
+- 移除焦點環（a11y 關鍵違規）
+- Hover-only 互動（行動裝置無法觸發）
+- Placeholder 當 Label 用
+- Icon-only 按鈕沒有 label
+- 只用顏色傳達資訊（色盲友善）
+- 圓形轉圈加載（改用骨架屏）
+- 「向下滾動以探索」等填充文字
+- 英雄上的任意浮動徽章 / 郵票圖標
+- 3 列相等卡片功能佈局
+- 過度飽和的漸層背景
 
 ---
 
@@ -254,6 +257,16 @@ description: [專案名稱] 設計系統規範。
 - Heading：[字型名稱]
 - Body：[字型名稱]
 - Mono：[字型名稱]
+
+## 字體數值
+- Display：clamp([min], [fluid], [max])
+- H1：[數值]
+- Body：[數值]
+
+## Tailwind / CSS 數值
+- 容器最大寬度：max-w-[X]（對應 [X]px）
+- 英雄頂部填充：pt-[X]（對應 [X]px）
+- Spring 動畫參數：stiffness: [X], damping: [X]
 
 ## 品牌語氣（供文案 / 行銷 agent 使用）
 - 語氣關鍵詞：[例如：溫暖、安靜、靈性]

@@ -42,3 +42,31 @@ risk-manager。
 ## 通用準則
 - commit 或 push **只在使用者要求時**進行;push 到預設分支需使用者同意。
 - 測試失敗、跳過的步驟,如實回報,不謊報完成。
+
+## 特殊指令表
+
+總指揮看到以下關鍵字，自動派對應流程執行：
+
+### 開發流程
+| 使用者說 | 總指揮動作 |
+|---------|-----------|
+| `我要做功能 X` | 依任務類型判斷規模，套用 feature-workflow 派工 |
+| `sprint 完成` | 相關 agent 寫 draft sessions/，不碰 assets/ |
+| `做個技術審查` | 派 code-reviewer + security-reviewer |
+| `部署` | 派 devops，執行部署前檢查清單 |
+| `更新文件` | 派 tech-writer，同步三份系統文件 |
+
+### 知識管理
+| 使用者說 | 總指揮動作 |
+|---------|-----------|
+| `收割` / `知識收割` | 載入 knowledge-harvest skill，掃描本專案 draft sessions → 四關卡評估 → 升級 assets/ |
+| `結案` / `專案完成` | 知識收割 → 更新三份系統文件 → commit |
+
+### 品質 / 合規
+| 使用者說 | 總指揮動作 |
+|---------|-----------|
+| `做無障礙審查` | 派 accessibility-reviewer |
+| `效能審查` | 派 performance-engineer |
+| `資安審查` | 派 security-reviewer |
+| `法務審查` | 派 legal + risk-manager |
+| `商業審查` | 派 business-analyst + risk-manager |
