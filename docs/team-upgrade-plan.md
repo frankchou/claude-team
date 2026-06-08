@@ -176,7 +176,7 @@ install.sh 建立 symlink：
 ---
 
 ### Task 1 — 修訂 `design-system` skill（去除框架綁定）
-**優先級：P0** | 狀態：`[ ] 需修訂`
+**優先級：P0** | 狀態：`[x] 已完成`
 
 **問題**：現有版本含 Tailwind 專屬語法（`pt-24`、`max-w-6xl`、`clamp()` 具體值），不適合共通包。
 
@@ -189,7 +189,7 @@ install.sh 建立 symlink：
 ---
 
 ### Task 2 — 建立 `output-quality` skill
-**優先級：P0** | 狀態：`[ ] 未開始`
+**優先級：P0** | 狀態：`[x] 已完成`
 
 **來源**：taste-skill output-skill + ruflo 紀律 + research/laziness 研究
 
@@ -204,7 +204,7 @@ install.sh 建立 symlink：
 ---
 
 ### Task 3 — 建立 team-knowledge 知識共享系統
-**優先級：P0** | 狀態：`[ ] 未開始`
+**優先級：P0** | 狀態：`[x] 已完成`
 
 **需建立 / 修改的檔案**：
 
@@ -242,7 +242,7 @@ install.sh 建立 symlink：
 ---
 
 ### Task 3b — 建立 `knowledge-harvest` skill + 更新 CLAUDE.md 指令表
-**優先級：P0** | 狀態：`[ ] 未開始`
+**優先級：P0** | 狀態：`[x] 已完成`
 
 **建立 `skills/knowledge-harvest/SKILL.md`**，定義收割執行流程：
 1. 掃描 `~/.claude/team-knowledge/sessions/` 中本專案所有 `status: draft` 記錄
@@ -266,7 +266,7 @@ install.sh 建立 symlink：
 ---
 
 ### Task 4 — 建立素材庫雙軌結構
-**優先級：P0** | 狀態：`[ ] 未開始`
+**優先級：P0** | 狀態：`[x] 已完成`
 
 **來源**：taste-skill + ui-ux-pro-max 的 references/ 目錄
 
@@ -305,7 +305,7 @@ assets/
 ---
 
 ### Task 5 — 對所有 32 個 agent 套用反懶惰框架 + 決策樹格式
-**優先級：P0** | 狀態：`[ ] 未開始`
+**優先級：P0** | 狀態：`[x] 已完成`
 
 **來源**：taste-skill research/laziness
 
@@ -325,7 +325,7 @@ assets/
 ---
 
 ### Task 6 — 建立 13 個新 Agent + 優化 3 個既有 Agent
-**優先級：P0** | 狀態：`[ ] 未開始`
+**優先級：P0** | 狀態：`[x] 已完成`
 
 **新增 13 個**：
 
@@ -356,7 +356,7 @@ assets/
 ---
 
 ### Task 7 — 強化 `feature-workflow` skill
-**優先級：P1** | 狀態：`[ ] 未開始`
+**優先級：P1** | 狀態：`[x] 已完成`
 
 **新增內容**：
 - 並發優先：「1 次派工 = 所有相關 agent 同時啟動，不序列等待」
@@ -372,7 +372,7 @@ assets/
 ---
 
 ### Task 8 — 強化設計層 Agent（4 個）
-**優先級：P1** | 狀態：`[ ] 未開始`
+**優先級：P1** | 狀態：`[x] 已完成（含於 Task 5+6）`
 
 #### 8a — `ui-designer`
 - 全元件狀態強制：default / hover / active / disabled / loading / empty / error
@@ -399,7 +399,7 @@ assets/
 ---
 
 ### Task 9 — 強化 `coding-conventions` skill
-**優先級：P2** | 狀態：`[ ] 未開始`
+**優先級：P2** | 狀態：`[x] 已完成`
 
 **新增段落 `## UI 反爛清單`**：
 - 禁止字體、AI 陳詞
