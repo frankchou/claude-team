@@ -11,7 +11,7 @@ mkdir -p "$DEST/agents" "$DEST/skills" "$DEST/references" "$DEST/scripts"
 # 32 個角色 agent
 cp "$DIR"/agents/*.md "$DEST/agents/"
 
-# 9 個通用 skill
+# 11 個通用 skill
 cp -r "$DIR"/skills/* "$DEST/skills/"
 
 # 素材庫 references（唯讀，外部引入）
@@ -75,5 +75,5 @@ else
 fi
 
 echo ""
-echo "✅ 完成：32 個 agent、9 個 skill、素材庫、team-knowledge、全域 CLAUDE.md 已安裝到 $DEST"
+echo "✅ 完成：32 個 agent、11 個 skill、素材庫、team-knowledge、全域 CLAUDE.md 已安裝到 $DEST"
 echo "   重開 Claude Code 後，所有專案即可使用這支 AI 敏捷團隊。"
