@@ -5,47 +5,99 @@ description: AI 敏捷團隊的派工劇本。當需要規劃一個任務該找�
 
 # 功能開發工作流程（派工劇本）
 
-總指揮接到任務後,依本劇本判斷「找誰、什麼順序、如何整合」。
+總指揮接到任務後，依本劇本判斷「找誰、什麼順序、如何整合」。
 
-## 一、角色路由表 — 任務類型 → 該派的角色
+---
+
+## 一、角色路由表（32 agent）— 任務類型 → 該派的角色
 
 | 任務類型 | 必派角色 | 視情況加派 |
 |---------|---------|-----------|
-| 小型 bug 修復 | 全端、Code Reviewer、QA | 架構師（若涉及設計） |
-| 純後端 / 邏輯變更 | 產品經理、架構師、全端、Code Reviewer、QA | 資安、DevOps |
-| UI / UX 變更 | 產品經理、UX、UI、全端、Code Reviewer、QA | 美術（視覺）、文案（文字） |
-| 大型新功能 | 全核心層 + 設計層 + 專案經理 | 商業層、治理層 |
-| 部署 / 環境 / 排程 | DevOps | 資安 |
-| 文件更新 | 技術文件 | — |
-| 成長 / 行銷 / 上線 | 市場分析、數據分析師、行銷、產品經理 | 法務 |
-| 合規 / 隱私 / 版權 | 法務、風險管理師、資安 | — |
+| 小型 bug 修復 | fullstack-engineer、code-reviewer、qa-tester | architect（若涉及設計） |
+| 純後端 / 邏輯變更 | product-manager、architect、fullstack-engineer、code-reviewer、qa-tester | security-reviewer、devops |
+| UI / UX 變更 | product-manager、ux-designer、ui-designer、fullstack-engineer、code-reviewer、qa-tester | art-designer、copywriter、interaction-designer、motion-designer |
+| 大型新功能 | 上列全部 + project-manager | brand-designer、content-strategist、business-analyst、risk-manager |
+| 設計系統 / 品牌 | brand-designer、ui-designer、art-designer | motion-designer、interaction-designer、content-strategist |
+| 無障礙合規 | accessibility-reviewer | ui-designer、qa-tester |
+| 效能優化 | performance-engineer | fullstack-engineer、architect |
+| 部署 / 環境 / 排程 | devops | security-reviewer |
+| 文件更新 | tech-writer | — |
+| 成長 / 行銷 / 上線 | market-analyst、data-analyst、marketing、product-manager | seo-specialist、copywriter、legal |
+| 社群 / 內容行銷 | social-media-manager、viral-optimizer、copywriter | seo-specialist、content-strategist |
+| 廣告投放 | performance-marketer、data-analyst | marketing |
+| 商業模式 / 定價 | business-model-designer、business-analyst | product-manager、risk-manager |
+| 夥伴 / BD | business-developer | business-model-designer、legal |
+| 合規 / 隱私 / 版權 | legal、risk-manager、security-reviewer | auditor |
+
+---
 
 ## 二、標準執行順序
 
 ```
-（成長任務）商業/成長層：市場分析 ∥ 數據分析師 → 行銷
-   → 產品經理（需求、驗收標準）
-   → 專案經理（拆任務、排程、相依）
-   → 架構師 ∥ 設計層（UX/UI/美術/文案）        ← 並行
-   → 全端工程師（實作）
-   → Code Reviewer ∥ QA 測試                   ← 並行
-   → 技術文件（更新三份系統文件）
-   → DevOps（部署）
-治理/控管層（法務/稽核/風險）：碰到合規、版權、重大風險時插入任一階段
+（成長 / 行銷任務）
+  市場分析 ∥ 數據分析師 → 行銷策略 → 產品經理
+  
+（開發任務）
+  產品經理（需求、驗收標準）
+  → 專案經理（拆任務、排程、相依）
+  → 架構師 ∥ 設計層（UX/UI/美術/文案/互動/動畫）  ← 並行
+  → 全端工程師（實作）
+  → code-reviewer ∥ qa-tester                       ← 並行
+  → accessibility-reviewer ∥ performance-engineer   ← 視需求加入
+  → tech-writer（更新三份系統文件）
+  → devops（部署）
+
+治理/控管層（legal/auditor/risk-manager）：
+  碰到合規、版權、重大風險時插入任一階段
 ```
 
-## 三、並行 vs 接力原則
+---
 
-- **可並行**：研究、設計、分析（不碰程式碼）→ 同一批同時開多個 agent。
-- **需接力**：實作（改同一批檔案）→ 依序執行,或用 git worktree 隔離。
-- 不要讓兩個 agent 同時改同一個檔案。
+## 三、並行 vs 接力原則（並行優先）
 
-## 四、團隊規模要依任務縮放
+**預設並行**：
+- 研究、設計、分析任務 → 同批同時開多個 agent（節省時間）
+- 不同功能模組的實作 → git worktree 隔離後並行
+- code-reviewer + qa-tester 永遠並行執行
 
-- 小任務只派 3～5 個角色,別 19 個全開（浪費 token 又慢）。
-- 治理/控管層平常不出動,只在合規/風險情境登場。
+**需接力**：
+- 改同一批檔案的實作任務 → 依序執行，或用 git worktree 隔離
+- 後續 agent 依賴前一 agent 產出（如 ui-designer 需等 ux-designer 完成 ux-flow.md）
 
-## 五、交付與整合
+**禁止**：兩個 agent 同時寫同一個檔案。
 
-- 每個角色把產出**寫成檔案**放進 `docs/features/<功能代號>/`,並回報摘要。
-- 總指揮負責收齊、整合、解決衝突,最後套用 `commit-and-docs` 收尾。
+---
+
+## 四、知識讀取步驟（每個 agent 開工前）
+
+適用素材型 agent（ui-designer、ux-designer、art-designer、brand-designer、motion-designer、interaction-designer、content-strategist）：
+
+1. 先讀 `~/.claude/assets/`（同類目錄，如 `assets/typography/`）—— 有則優先用
+2. 若無，讀 `~/.claude/references/`（同類目錄）作為起點
+3. 讀 `~/.claude/team-knowledge/sessions/`，找同類型專案 / 同角色的過去記錄
+
+---
+
+## 五、知識寫入步驟（每個 agent 完工後）
+
+載入 `knowledge-capture` skill 的 agent，任務完成後：
+
+1. 寫 `~/.claude/team-knowledge/sessions/YYYY-MM-DD_<project>_<agent>.md`（status: draft）
+2. **絕不碰 assets/**（draft 決策可能被推翻）
+3. 等使用者說「收割」才由 knowledge-harvest 升級 assets/
+
+---
+
+## 六、團隊規模要依任務縮放
+
+- 小任務只派 3～5 個角色，別 32 個全開（浪費 token 又慢）。
+- 治理/控管層平常不出動，只在合規/風險情境登場。
+- 行銷執行層（social-media-manager、performance-marketer）只在有實際執行需求時派出。
+
+---
+
+## 七、交付與整合
+
+- 每個角色把產出**寫成檔案**放進 `docs/features/<功能代號>/`，並回報摘要給總指揮。
+- 總指揮負責收齊、整合、解決衝突，最後套用 `commit-and-docs` skill 收尾。
+- 檔案命名規範：`requirements.md`、`ux-flow.md`、`ui-spec.md`、`marketing-plan.md` 等。
