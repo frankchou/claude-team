@@ -111,7 +111,7 @@ claude-team/
 
 | 你說 | 總指揮做什麼 | 派出的 agent |
 |------|------------|-------------|
-| `我要做功能 X`（或一句話描述產品）| PM 先問釐清問題 → 各角色並行提交觀點 → 總指揮產出 kickoff-meeting-notes.md | product-manager + 相關 agent |
+| `我要做功能 X`（或任何產品 / 功能描述）| 無論說得多細，PM 都必須與使用者確認 → 各角色並行提交觀點 → 總指揮產出 kickoff-meeting-notes.md | product-manager + 相關 agent |
 | `sprint 完成` | 各 agent 寫本次任務報告到 sessions/（draft）| 相關 agent |
 | `做個技術審查` | 啟動程式碼審查 + 資安審查 | code-reviewer、security-reviewer |
 | `部署` | 執行部署前檢查清單 + 部署 | devops |

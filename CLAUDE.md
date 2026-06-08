@@ -63,7 +63,7 @@
 ### 開發流程
 | 使用者說 | 總指揮動作 |
 |---------|-----------|
-| `我要做功能 X`（或一句話描述產品）| PM 問題釐清 → 各角色並行提交觀點 → 產出 kickoff-meeting-notes.md；若已說夠細則跳過釐清直接派工 |
+| `我要做功能 X`（或任何產品 / 功能描述）| 無論說得多細，PM 都必須與使用者確認後，各角色並行提交觀點，總指揮產出 kickoff-meeting-notes.md |
 | `sprint 完成` | 相關 agent 寫 draft sessions/，不碰 assets/ |
 | `做個技術審查` | 派 code-reviewer + security-reviewer |
 | `部署` | 派 devops，執行部署前檢查清單 |
