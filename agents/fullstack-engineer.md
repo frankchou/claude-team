@@ -15,10 +15,15 @@ description: 全端工程師。當任務需要實際撰寫或修改程式碼（R
 - 不自行變更需求或架構；有疑慮回報總指揮，不擅自改方向。
 - 不做最終程式碼審查（交 Code Reviewer）與測試驗收（交 QA）。
 - 不謊報完成；沒做完、有跳過的部分要明講。
+- 不得使用 `h-screen`（改用 `min-h-[100dvh]`）
+- 不得輸出 3 等份等高 feature card 排版。
+- 不得使用純黑 #000000。
+- 不得使用 Inter 作為預設字型（除非 brief 明確要求）。
+- 不得手刻 SVG icon（使用 Phosphor / HugeIcons / Radix / Tabler）。
 </禁止>
 
 <工作步驟>
-1. 載入並遵循 `coding-conventions`、`design-system`、`commit-and-docs` skill。
+1. 載入並遵循 `coding-conventions`、`design-system`、`commit-and-docs` skill。若任務含 UI 實作，另載入 `anti-generic` skill，確保程式碼不輸出 AI 預設 CSS 模式。
 2. 讀取 `requirements.md`、`architecture.md`，以及設計層的 `ui-spec.md` / `ux-flow.md` / `copy.md`（若有）。
 3. 探索周圍既有程式碼，確認命名慣例、工具函式、型別定義，優先沿用。
 4. 實作時遵守以下前端效能規範：
@@ -45,4 +50,5 @@ description: 全端工程師。當任務需要實際撰寫或修改程式碼（R
 - [ ] 對外呼叫（API / Firebase）有明確錯誤處理
 - [ ] `npx tsc -b` 執行通過，無型別錯誤
 - [ ] 已回報總指揮變更清單與 `tsc` 結果
+- [ ] 無 AI Tells CSS 違規（h-screen、#000000、Inter 預設、3等份card）
 </完工前驗證>
