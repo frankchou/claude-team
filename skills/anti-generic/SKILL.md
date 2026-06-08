@@ -486,3 +486,228 @@ grain / noise 濾鏡只能用在 fixed `pointer-events-none` 的偽元素（`fix
 - 不得用純 `#000000` 或純 `#ffffff`（使用 zinc-950、off-white），純值會消除深度
 - 確保 light 模式下有視覺層次感的 CTA，在 dark 模式下同樣突出
 - 出貨前必須在 light / dark 兩種模式下測試，不可只在一種模式下出貨
+
+---
+
+## 九、動畫骨架程式碼（Canonical Animation Skeletons）
+
+來自 taste-skill Section 5。以下是 canonical 實作，可直接複製使用，不要自行發明替代實作。
+
+### 5.A Sticky Stack
+
+用途：卡片在滾動時依序固定並堆疊，前一張卡片縮小淡出，下一張頂上來。ScrollTrigger pin + scale/opacity 衰減。
+
+關鍵細節：`start: "top top"`（不是 `"top center"`），每張卡片（除最後一張）都 pin，scale/opacity 的觸發器是「下一張卡片」的 scrollTrigger——前一張因此在下一張進場時縮小。
+
+```tsx
+"use client";
+import { useRef, useEffect } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useReducedMotion } from "motion/react";
+
+gsap.registerPlugin(ScrollTrigger);
+
+export function StickyStack({ cards }: { cards: React.ReactNode[] }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion();
+
+  useEffect(() => {
+    if (reduce || !ref.current) return;
+    const ctx = gsap.context(() => {
+      const cardEls = gsap.utils.toArray<HTMLElement>(".stack-card");
+      cardEls.forEach((card, i) => {
+        if (i === cardEls.length - 1) return;
+        ScrollTrigger.create({
+          trigger: card,
+          start: "top top",                              // pin at viewport top
+          endTrigger: cardEls[cardEls.length - 1],
+          end: "top top",
+          pin: true,
+          pinSpacing: false,
+        });
+        gsap.to(card, {
+          scale: 0.92,
+          opacity: 0.55,
+          ease: "none",
+          scrollTrigger: {
+            trigger: cardEls[i + 1],
+            start: "top bottom",
+            end: "top top",
+            scrub: true,
+          },
+        });
+      });
+    }, ref);
+    return () => ctx.revert();
+  }, [reduce]);
+
+  return (
+    <div ref={ref} className="relative">
+      {cards.map((card, i) => (
+        <div
+          key={i}
+          className="stack-card sticky top-0 min-h-[100dvh] flex items-center justify-center"
+        >
+          {card}
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
+### 5.B Horizontal Pan
+
+用途：垂直滾動劫持為水平平移，整個區段固定不動，內部 track 水平滑動。
+
+關鍵細節：`start: "top top"` + `pin: true`，`end` 等於水平位移距離，`scrub: 1`，`invalidateOnRefresh: true`（視窗 resize 時重算）。wrapper 固定，inner track 水平移動。
+
+```tsx
+"use client";
+import { useRef, useEffect } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useReducedMotion } from "motion/react";
+
+gsap.registerPlugin(ScrollTrigger);
+
+export function HorizontalPan({ children }: { children: React.ReactNode }) {
+  const wrap = useRef<HTMLDivElement>(null);
+  const track = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion();
+
+  useEffect(() => {
+    if (reduce || !wrap.current || !track.current) return;
+    const ctx = gsap.context(() => {
+      const distance = track.current!.scrollWidth - window.innerWidth;
+      gsap.to(track.current, {
+        x: -distance,
+        ease: "none",
+        scrollTrigger: {
+          trigger: wrap.current,
+          start: "top top",                              // pin starts when section top hits viewport top
+          end: () => `+=${distance}`,                    // scroll distance = track width minus viewport
+          pin: true,
+          scrub: 1,
+          invalidateOnRefresh: true,
+        },
+      });
+    }, wrap);
+    return () => ctx.revert();
+  }, [reduce]);
+
+  return (
+    <section ref={wrap} className="relative overflow-hidden">
+      <div ref={track} className="flex h-[100dvh] items-center">
+        {children}
+      </div>
+    </section>
+  );
+}
+```
+
+### 5.C Scroll Reveal Stagger
+
+用途：元素進入 viewport 時依序淡入（feature 列表、testimonial grid、logo 牆等）。比 GSAP 更輕量，不需要 ScrollTrigger，優先選用。
+
+何時用：任何「進入 viewport 時出現」的需求，只需 enter-on-scroll 不需 pin/scrub。把 GSAP 留給真正需要固定與 scrub 的工作。
+
+```tsx
+"use client";
+import { motion, useReducedMotion } from "motion/react";
+
+export function RevealStagger({ items }: { items: string[] }) {
+  const reduce = useReducedMotion();
+  return (
+    <ul className="grid gap-6">
+      {items.map((item, i) => (
+        <motion.li
+          key={item}
+          initial={reduce ? false : { opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{
+            duration: 0.6,
+            delay: i * 0.06,
+            ease: [0.16, 1, 0.3, 1],
+          }}
+        >
+          {item}
+        </motion.li>
+      ))}
+    </ul>
+  );
+}
+```
+
+### 5.D 禁止動畫模式
+
+以下實作方式全部禁止：
+
+- **`window.addEventListener("scroll", ...)`** 禁止。每個 scroll frame 都執行，容易 jank，沒有 batching。改用 Motion 的 `useScroll()`、GSAP 的 `ScrollTrigger`、`IntersectionObserver`，或 CSS `scroll-driven animations`（`animation-timeline: view()`）。
+- **用 `window.scrollY` 計算自訂 scroll 進度並寫入 React state**。原因同上，每 frame re-render。
+- **`requestAnimationFrame` loop 觸碰 React state**。改用 motion values（`useMotionValue` + `useTransform`）。
+- **Layout Transitions**：用 Motion 的 `layout` 和 `layoutId` props 處理可見的 state 變化（重排列表、展開 modal、跨路由共享元素）。不要為了「安全感」把靜態內容包在 `layout` props 裡，這會造成不必要的 measurement 工作。
+- **Staggered Orchestration**：用 `staggerChildren`（Motion）或 CSS cascade（`animation-delay: calc(var(--index) * 100ms)`）處理需要依序的 reveal 時機。用 `staggerChildren` 時，parent（`variants`）和 children 必須在同一個 Client Component tree 中。
+
+---
+
+## 十、改版流程（Redesign Protocol）
+
+來自 taste-skill Section 11。本改版流程同時適用於全新建置（greenfield）與既有頁面改版（redesign）。**錯誤分類改版模式是最常見的爛輸出來源。**
+
+### 11.A 先判斷模式（第一個動作）
+
+- **Greenfield** - 沒有既有網站，或已獲核可全面翻新。從三旋鈕基準值開始設定。
+- **Redesign - Preserve（保留改版）** - 現代化但不破壞品牌。先稽核，提取品牌 token，漸進演化。
+- **Redesign - Overhaul（全面翻新）** - 在既有內容上建立全新視覺語言。視覺部分當 greenfield 處理，但保留內容與 IA。
+
+若不確定，只問**一次**：「這次改版要保留現有品牌，還是視覺上從頭重來？」
+
+### 11.B 動手前先稽核
+
+在提出任何修改建議之前，先記錄現況：
+
+- **品牌 token** - 主色 / 強調色、字型組合、logo 處理方式、圓角尺度。
+- **資訊架構（IA）** - 頁面樹狀結構、主要導覽、關鍵轉換路徑。
+- **內容區塊** - 現有哪些、哪些有在做事、哪些是填充物。
+- **應保留的模式** - 標誌性互動、可辨識的 hero、文案語氣。
+- **應淘汰的模式** - AI Tell、破損版型、失效連結、泛型 stock 圖、效能陷阱。
+- **現有網站的旋鈕讀取值** - 推算現有 `DESIGN_VARIANCE` / `MOTION_INTENSITY` / `VISUAL_DENSITY`。這是起點，不是基準值。
+- **SEO 基準** - 目前排名頁面、meta title、structured data、OG cards。**SEO 遷移是改版的第一大風險。**
+
+### 11.C 保留規則
+
+- **非必要不更動 IA**。保持頁面 slug、anchor ID、主導覽標籤穩定（SEO 與肌肉記憶）。
+- **套用 3.2 色彩規則前先提取品牌色**。已經是紫色的品牌繼續是紫色，應用 LILA RULE 的覆寫路徑。
+- **保留文案語氣**，除非被要求改寫。視覺現代化不等於內容改寫。
+- **維護既有無障礙成果**。不得讓 focus state、alt text、鍵盤導覽、對比度退步。
+- **尊重既有 analytics 事件**。不要更名按鈕、表單欄位、section ID，下游 tracking 依賴這些。
+
+### 11.D 現代化槓桿（依優先順序）
+
+依序套用，當 brief 滿足就停止：
+
+1. **字型換新** - 每單位風險中視覺提升最大。
+2. **間距與韻律** - 增加 section padding，修正垂直韻律。
+3. **色彩重新校準** - 降低飽和度、統一中性色、保留品牌強調色。
+4. **動態層** - 在現有元件上加入符合 `MOTION_INTENSITY` 的微互動。
+5. **Hero 與關鍵區塊重組** - 用設計詞彙庫（第七節）重構漏斗頂部。
+6. **完整區塊替換** - 只有在現有區塊無法改救時才執行。
+
+### 11.E 決策樹：針對性演化 vs 全面改版
+
+- IA、內容與 SEO 狀況良好 → **針對性演化**（槓桿 1-4）。約 40% 的風險換到約 70% 的價值。
+- 視覺負債已是結構性問題（破損 IA、無設計系統、行動版破損）→ **全面改版**，但嚴格保留內容。
+- 品牌本身正在更換 → **greenfield**。
+
+### 11.F 絕對不能靜默修改的項目
+
+以下修改必須取得使用者明確同意，不可自行決定：
+
+- URL 結構 / route slug。
+- 主導覽標籤。
+- 表單欄位名稱或順序（破壞 analytics 與自動填寫）。
+- 品牌 logo 或 wordmark。
+- 既有法律 / 同意 / cookie 文案。
